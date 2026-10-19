@@ -1,19 +1,18 @@
 # Backlog
 
 Ideas and tasks for Agents Office. The Planner keeps this ordered: top = most important.
-Score: V = value, E = effort, R = risk, priority = V×2 − E − R.
+Score: V = value, E = effort, R = risk; priority = V×2 − E − R (+2 for a bug the owner would notice).
 
-In progress: `ai/tasks/001-show-who-is-up-next.md` (V3 E1 R1 = 4)
+In progress: `ai/tasks/001-show-who-is-next.md` (Show who is up next, V3 E1 R2 = 3)
 
-## To do
-- The relay track doesn't show how far the round has got: finished stations look the same as ones still waiting (V2 E1 R1 = 2)
-- "Parked" is unexplained; a beginner can't tell what it means or why those cards are greyed out (V2 E1 R1 = 2)
-- The card of the agent that is working doesn't stand out from the others; only a small dot changes (V2 E1 R1 = 2)
-- An open "What's missing" or "Read its instructions" section snaps shut every time the live status changes (V2 E1 R2 = 1)
-- You can't tell if the live status is old, for example if a run crashed and an agent shows "Working" for hours (needs a time in `status.js`, which runs don't write yet) (V2 E2 R1 = 1)
-- The footer tells you to run `npm run dashboard` and look in `dashboard/status.js`, which don't exist in this project; the header still says "ai-agents · crew board" (V1 E1 R1 = 0)
-
-## Waiting on the owner (open questions in VISION.md)
-- Make it look like an office: floor plan with desks, or employee badges (V2 E3 R3, blocked)
-- Give an agent work from the page, or only watch (blocked)
-- Show past work each agent did (history) (blocked)
+- Open "What's missing" / "Read its instructions" panels snap shut whenever the live status changes during a run (V2 E1 R2 = 1, bug +2 = 3)
+- The note at the bottom tells you to run `npm run dashboard` and points to `dashboard/status.js`, neither of which exists in this project (V1 E1 R1 = 0, bug +2 = 2)
+- "Parked" helpers are greyed out with no plain explanation of what "parked" means (V2 E1 R1 = 2)
+- Cards show technical details a beginner can't read at a glance (file names like `planner.md`, "Brain: Opus", raw instructions) (V2 E1 R2 = 1)
+- The page is still titled "Agent Crew Board" / "Your AI build crew" and says "Seven helpers" even though four are parked, not "Agents Office" (V1 E1 R1 = 0)
+- The relay track only highlights the helper that is working; finished or stuck helpers look the same as waiting ones (V1 E1 R1 = 0)
+- If the live status can't be loaded, the page silently keeps showing old status with no warning (V1 E1 R1 = 0)
+- Show what comes next when nobody is working (e.g. which helper starts the next round) (V2 E1 R2 = 1)
+- Make it look like an office (floor plan with desks, or employee badges): blocked, waiting on the owner's open question in VISION.md (V2 E3 R3 = -2)
+- Give an agent work from the page: blocked, waiting on the owner's open question in VISION.md
+- Show past work for each agent (history): blocked, waiting on the owner's open question in VISION.md
