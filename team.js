@@ -69,16 +69,16 @@ window.TEAM = [
     ],
   },
   {
-    file: 'qa',
+    file: 'tester',
     nickname: 'Tester',
     color: '#15803d',
-    oneLine: 'Opens the real site, clicks around, takes screenshots, measures speed.',
-    gets: 'The finished change and its checklist',
-    gives: 'Pass or fail, with what broke and how to repeat it',
-    depth: 1,
+    oneLine: 'Opens the real page, checks every item on the task, and saves the work if it passes.',
+    gets: 'The built task and its checklist',
+    gives: 'Passed (work saved) or failed (sent back with exact fixes)',
+    depth: 2,
     missing: [
-      'Test setup was tied to one site and has been removed',
-      'No checks for links, forms or 3D scenes yet',
+      'Not tested yet: first job is checking task 001',
+      'Only checks how pages look and react to data; can\'t click through flows yet',
     ],
   },
   {
@@ -97,4 +97,4 @@ window.TEAM = [
 ];
 
 // Order work is handed along in one round. The team lead coordinates all of them.
-window.RELAY = ['innovation', 'planner', 'designer', 'builder', 'qa', 'code-reviewer'];
+window.RELAY = ['innovation', 'planner', 'designer', 'builder', 'tester', 'code-reviewer'];
