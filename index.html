@@ -19,6 +19,7 @@
     --done: #15803d;
     --failed: #b91c1c;
     --waiting: #8a86a3;
+    --next: #2563eb;
     --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
     --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
     --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
@@ -26,7 +27,7 @@
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #121022; --surface: #1c1a31; --ink: #ecebf6; --muted: #a29fbd;
-      --line: #2e2b48; --track: #3b3858; --waiting: #77739a;
+      --line: #2e2b48; --track: #3b3858; --waiting: #77739a; --next: #60a5fa;
     }
   }
   * { box-sizing: border-box; }
@@ -104,6 +105,7 @@
   [data-state="working"] .dot { background: var(--working); }
   [data-state="done"] .dot { background: var(--done); }
   [data-state="failed"] .dot { background: var(--failed); }
+  [data-state="next"] .dot { background: var(--next); }
   [data-state="parked"] { opacity: .5; filter: grayscale(.6); }
   .doing { margin: 0; padding: .6rem .75rem; border-radius: 8px; background: var(--bg); font-size: .9rem; }
   .doing:empty { display: none; }
@@ -173,13 +175,19 @@
   };
   const MODEL_WORDS = { opus: 'Opus (strongest)', sonnet: 'Sonnet (fast, capable)', haiku: 'Haiku (quickest)', inherit: 'Same as yours' };
   const DEPTH_WORDS = ['', 'Draft', 'Usable', 'Solid', 'Expert'];
-  const STATE_WORDS = { waiting: 'Waiting', working: 'Working', done: 'Done', failed: 'Stuck', parked: 'Parked' };
+  const STATE_WORDS = { waiting: 'Waiting', working: 'Working', done: 'Done', failed: 'Stuck', parked: 'Parked', next: 'Up next' };
 
   const byFile = Object.fromEntries(TEAM.map((t) => [t.file, t]));
   const initials = (s) => s.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const state = (file) => window.AGENTS?.[file]?.parked ? 'parked' : (window.STATUS?.agents?.[file]?.state) || 'waiting';
   const doing = (file) => window.STATUS?.agents?.[file]?.doing || '';
+  // Who takes the work after the first working agent in the relay. Parked agents can't take work, so they are skipped.
+  const canTakeWork = (file) => !window.AGENTS?.[file]?.parked;
+  function nextUp() {
+    const i = RELAY.findIndex((f) => state(f) === 'working');
+    return i < 0 ? null : RELAY.slice(i + 1).find(canTakeWork) || null;
+  }
 
   function renderRelay() {
     const lead = byFile.orchestrator;
@@ -198,10 +206,11 @@
   }
 
   function renderCards() {
+    const next = nextUp();
     document.getElementById('grid').innerHTML = TEAM.map((t) => {
       const a = window.AGENTS?.[t.file] || { tools: [], model: 'inherit', instructions: '' };
       const tools = [...new Set(a.tools.map((x) => TOOL_WORDS[x] || x))];
-      const s = state(t.file);
+      const s = t.file === next && state(t.file) !== 'working' ? 'next' : state(t.file);
       return `<article class="card" style="--c:${t.color}" data-state="${s}">
         <div class="card-head">
           <span class="token" aria-hidden="true">${initials(t.nickname)}</span>
@@ -209,7 +218,7 @@
           <span class="pill"><span class="dot"></span>${STATE_WORDS[s] || s}</span>
         </div>
         <p class="one">${esc(t.oneLine)}</p>
-        <p class="doing">${esc(doing(t.file))}</p>
+        <p class="doing">${esc(doing(t.file) || (s === 'next' ? `Will get: ${t.gets}` : ''))}</p>
         <dl class="flow"><dt>Gets</dt><dd>${esc(t.gets)}</dd><dt>Gives</dt><dd>${esc(t.gives)}</dd></dl>
         <ul class="chips" aria-label="Allowed to">${tools.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
         <div class="meta">
@@ -225,10 +234,11 @@
   function renderNow() {
     const run = window.STATUS?.run;
     const busy = TEAM.find((t) => state(t.file) === 'working');
+    const next = byFile[nextUp()];
     const el = document.getElementById('now');
     el.dataset.state = busy ? 'working' : 'waiting';
     document.getElementById('now-text').textContent = busy
-      ? `${busy.nickname} is working${run?.project ? ` on ${run.project}` : ''}.`
+      ? `${busy.nickname} is working${run?.project ? ` on ${run.project}` : ''}.${next ? ` Next up: ${next.nickname}.` : ''}`
       : run?.finishedAt ? `Nobody is working. Last round finished ${new Date(run.finishedAt).toLocaleString()}.`
       : 'Nobody is working right now. No rounds run yet.';
   }
