@@ -56,16 +56,16 @@ window.TEAM = [
     ],
   },
   {
-    file: 'developer',
+    file: 'builder',
     nickname: 'Builder',
     color: '#b45309',
-    oneLine: 'Writes the code and the tests for the task.',
-    gets: 'The task and the design brief',
-    gives: 'Changed code plus a test that proves it works',
-    depth: 1,
+    oneLine: 'Writes the code for one task, checks it, and leaves notes on what changed.',
+    gets: 'One task card from the Planner',
+    gives: 'Changed code plus notes on how to see it',
+    depth: 2,
     missing: [
-      'Assumes plain HTML only; doesn\'t adapt to React, three.js projects, etc.',
-      'No step to read and understand an unfamiliar codebase first',
+      'Not tested yet: first job is task 001 on Agent Office',
+      'Can\'t open a browser to see its own work; relies on the Tester for that',
     ],
   },
   {
@@ -97,4 +97,4 @@ window.TEAM = [
 ];
 
 // Order work is handed along in one round. The team lead coordinates all of them.
-window.RELAY = ['innovation', 'planner', 'designer', 'developer', 'qa', 'code-reviewer'];
+window.RELAY = ['innovation', 'planner', 'designer', 'builder', 'qa', 'code-reviewer'];
