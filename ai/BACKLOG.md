@@ -16,3 +16,6 @@ In progress: `ai/tasks/001-show-who-is-next.md` (Show who is up next, V3 E1 R2 =
 - Make it look like an office (floor plan with desks, or employee badges): blocked, waiting on the owner's open question in VISION.md (V2 E3 R3 = -2)
 - Give an agent work from the page: blocked, waiting on the owner's open question in VISION.md
 - Show past work for each agent (history): blocked, waiting on the owner's open question in VISION.md
+
+## To do
+- The next agent's card says "Will get: …" right above a "Gets" line with the same words; show it once (bug +2) (found by owner review of 001; the Tester missed it)

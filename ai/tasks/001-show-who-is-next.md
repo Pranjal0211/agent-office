@@ -73,13 +73,13 @@ Note: `status.js` today has nobody working (`agents: {}`), not the Planner as th
 > **In short:** Passed. While a helper is working, the top line now says who is next (for example "Planner is working on Agents Office. Next up: Builder."), and the next helper's card shows a blue "Up next" label with what it will get. Nothing else on the page changed.
 
 **Checks**
-- [x] Planner working: top line reads "Planner is working on Agents Office. Next up: Builder." (`ai/shots/001/planner-working-1280.png`)
-- [x] Builder card pill says "Up next" (blue dot) with "Will get: One task card from the Planner" (`ai/shots/001/planner-working-1280.png`)
+- [x] Planner working: top line reads "Planner is working on Agents Office. Next up: Builder." (`.agent-shots/001/planner-working-1280.png`)
+- [x] Builder card pill says "Up next" (blue dot) with "Will get: One task card from the Planner" (`.agent-shots/001/planner-working-1280.png`)
 - [x] Parked agents skipped: Designer stays "Parked", Builder is next (same screenshot)
-- [x] Tester working (last non-parked): top line "Tester is working on Agents Office." with no "Next up"; "Up next" found 0 times; no console errors (`ai/shots/001/tester-working-1280.png`)
-- [x] Nobody working (original status.js): no "Up next", "Next up" or "Will get" anywhere, no errors (`ai/shots/001/normal-1280.png`)
-- [x] 375px: top line wraps onto two lines, no sideways scrolling (overflow 0), "Up next" pill fits in the Builder card header (`ai/shots/001/planner-working-375.png`)
-- [x] Nothing broke: no console errors at either width in any case; relay track, cards and details render; dark mode with Builder working also fine (`ai/shots/001/builder-working-1280.png`). Live re-check timer code is untouched; I did not watch a live refresh.
+- [x] Tester working (last non-parked): top line "Tester is working on Agents Office." with no "Next up"; "Up next" found 0 times; no console errors (`.agent-shots/001/tester-working-1280.png`)
+- [x] Nobody working (original status.js): no "Up next", "Next up" or "Will get" anywhere, no errors (`.agent-shots/001/normal-1280.png`)
+- [x] 375px: top line wraps onto two lines, no sideways scrolling (overflow 0), "Up next" pill fits in the Builder card header (`.agent-shots/001/planner-working-375.png`)
+- [x] Nothing broke: no console errors at either width in any case; relay track, cards and details render; dark mode with Builder working also fine (`.agent-shots/001/builder-working-1280.png`). Live re-check timer code is untouched; I did not watch a live refresh.
 
 **Scope:** OK. Only `index.html` and the task card changed; status.js was edited temporarily and restored (git shows no change).
 **Nothing broke:** OK

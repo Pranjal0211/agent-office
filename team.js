@@ -77,7 +77,7 @@ window.TEAM = [
     gives: 'Passed (work saved) or failed (sent back with exact fixes)',
     depth: 2,
     missing: [
-      'Not tested yet: first job is checking task 001',
+      'Missed a repeated line in task 001; now has a "first-time visitor" check, not yet tested',
       'Only checks how pages look and react to data; can\'t click through flows yet',
     ],
   },
