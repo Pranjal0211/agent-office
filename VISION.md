@@ -1,9 +1,9 @@
-# Agents Office: vision
+# Agent Office: vision
 
 > Written by the human. Agents read this; they never edit it.
 
 ## The idea
-Agents Office is a virtual office where AI agents work as your employees, powered by Claude Code.
+Agent Office is a virtual office where AI agents work as your employees, powered by Claude Code.
 Imagine having your own company, except your employees are AI agents.
 
 ## Who it's for
@@ -18,7 +18,7 @@ who their agents are, what each one does, and what they are doing right now.
 ## Where it starts
 Today it is a simple "crew board" page (`index.html`): agent cards, a relay track showing the
 order work is passed along, and live status read from `status.js`.
-Agent data comes from the `ai-agents` repo (`agents.generated.js`, `team.js`); don't edit
+Agent data comes from the `agent-crew` repo (`agents.generated.js`, `team.js`); don't edit
 `agents.generated.js` by hand.
 
 ## Rules
