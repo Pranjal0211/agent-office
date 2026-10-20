@@ -1,6 +1,6 @@
 # 008: Create the design system (the office's look)
 
-Status: ready
+Status: awaiting approval
 Needs design: yes
 Big change: yes
 
@@ -54,3 +54,7 @@ Every direction should take a clear position on each of these, so the owner can 
 ## Notes for the Designer
 - This is the first design-system task: `Big change: yes`, so make 2 or 3 directions. Use the real helpers, words and colors from `team.js` and the current page; don't invent agents, numbers or history.
 - Show all 7 helpers, including the 2 that are parked today (Scout and Checker, per `agents.generated.js`), and the Team lead's role of coordinating the round.
+
+## Design
+- Review page: `design/008-design-system/review.html`
+- v1: 3 directions, made with Opus (no approved design system yet, big change), waiting for the owner
