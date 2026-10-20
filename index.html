@@ -183,6 +183,8 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const state = (file) => window.AGENTS?.[file]?.parked ? 'parked' : (window.STATUS?.agents?.[file]?.state) || 'waiting';
   const doing = (file) => window.STATUS?.agents?.[file]?.doing || '';
+  // Only an explicit "waiting" entry means the helper is asking the owner; no entry also reads as 'waiting'.
+  const waitingForYou = (file) => state(file) === 'waiting' && window.STATUS?.agents?.[file]?.state === 'waiting';
   // Who takes the work after the first working agent in the relay. Parked agents can't take work, so they are skipped.
   const canTakeWork = (file) => !window.AGENTS?.[file]?.parked;
   function nextUp() {
@@ -233,7 +235,7 @@
         <div class="card-head">
           <span class="token" aria-hidden="true">${initials(t.nickname)}</span>
           <span class="names"><span class="nick">${esc(t.nickname)}</span><span class="file">${esc(t.file)}.md</span></span>
-          <span class="pill"><span class="dot"></span>${STATE_WORDS[s] || s}</span>
+          <span class="pill"><span class="dot"></span>${s === 'waiting' && waitingForYou(t.file) ? 'Waiting for you' : STATE_WORDS[s] || s}</span>
         </div>
         <p class="one">${esc(t.oneLine)}</p>
         <p class="doing">${state(t.file) === 'parked' ? PARKED_LINE : esc(doing(t.file))}</p>
@@ -254,10 +256,15 @@
     const run = window.STATUS?.run;
     const busy = TEAM.find((t) => state(t.file) === 'working');
     const next = byFile[nextUp()];
+    const open = run?.startedAt && !run.finishedAt;
+    const asking = open && TEAM.find((t) => waitingForYou(t.file));
+    const on = run?.project ? ` on ${run.project}` : '';
     const el = document.getElementById('now');
     el.dataset.state = busy ? 'working' : 'waiting';
     document.getElementById('now-text').textContent = busy
-      ? `${busy.nickname} is working${run?.project ? ` on ${run.project}` : ''}.${next ? ` Next up: ${next.nickname}.` : ''}`
+      ? `${busy.nickname} is working${on}.${next ? ` Next up: ${next.nickname}.` : ''}`
+      : asking ? `${asking.nickname} is waiting for you${on}${doing(asking.file) ? `: ${doing(asking.file).replace(/([^.!?])$/, '$1.')}` : '.'}`
+      : open ? `A round is running${on}. The ${byFile['team-lead'].nickname} is between helpers.`
       : run?.finishedAt ? `Nobody is working. Last round finished ${new Date(run.finishedAt).toLocaleString()}.`
       : 'Nobody is working right now. No rounds run yet.';
   }
