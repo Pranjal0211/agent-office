@@ -1,6 +1,6 @@
 # 008: Create the design system (the office's look)
 
-Status: awaiting approval
+Status: design approved
 Needs design: yes
 Big change: yes
 
@@ -60,3 +60,4 @@ Every direction should take a clear position on each of these, so the owner can 
 - v1: 3 directions, made with Opus (no approved design system yet, big change), waiting for the owner
 - 2026-10-20: owner asked for changes on v1
 - v2: 1 direction (B, the badge wall), made with Opus (no approved design system yet), waiting for the owner
+- 2026-10-20: owner approved option B on v2 → `design/008-design-system/v2/option-b.html` is the source of truth
