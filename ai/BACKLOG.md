@@ -17,3 +17,6 @@ In progress: `ai/tasks/005-explain-parked.md` (Say in plain words what "parked" 
 - Make it look like an office (floor plan with desks, or employee badges): blocked, waiting on the owner's open question in VISION.md (V2 E3 R3 = -2) (design)
 - Give an agent work from the page: blocked, waiting on the owner's open question in VISION.md
 - Show past work for each agent (history): blocked, waiting on the owner's open question in VISION.md
+
+## To do
+- Parked helpers' explanation text is a bit faint on the greyed-out cards (found by Tester in 005, not logged at the time) (design)
