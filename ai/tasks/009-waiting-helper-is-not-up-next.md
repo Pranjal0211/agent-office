@@ -1,6 +1,6 @@
 # 009: Don't call a helper "Up next" while it is waiting for you
 
-Status: built
+Status: passed
 Needs design: no
 Big change: no
 
@@ -62,3 +62,24 @@ Make a scratch copy of `index.html`, `team.js`, `agents.generated.js` with your 
 
 **Not done / unsure**
 - Nothing. Known limit from the card (Designer approved early, then a new design task) left as is.
+
+## Tester notes
+
+> **In short:** Passed. When the Designer is waiting for you and the Planner is working, the Designer keeps "Waiting for you", the Builder is "Up next", and the top line says "Next up: Builder."
+
+**Checks**
+- [x] Case 1 (planner working, designer waiting): Designer pill "Waiting for you" with grey box "Waiting for your decision on 008"; Builder "Up next"; top line "Planner is working on agent-office. Next up: Builder." (`.agent-shots/009/case1-1280.png`)
+- [x] No designer entry: Designer "Up next", "Next up: Designer."
+- [x] Finished run with planner still working and designer waiting: Designer "Up next", "Next up: Designer."
+- [x] Several skips: designer and builder waiting give both "Waiting for you", Tester "Up next", "Next up: Tester."; only tester working gives no "Up next" and no "Next up" part. No console errors.
+- [x] 375px and 1280px, case 1: overflowPx 0, no errors (`case1-375.png`, `case1-1280.png`)
+- [x] Nothing broke: no run, working, between helpers, waiting-for-you with nobody working all read as before; an open panel stayed open after `status.js` changed and the top line updated.
+
+**Scope:** OK (only `index.html`, `ai/BACKLOG.md` and the card; live `status.js` not edited, tests ran on copies in /tmp)
+**Design match:** no design step
+**Nothing broke:** OK
+
+**Noted for later**
+- Nothing
+
+_Screenshots are local only (`.agent-shots/009/`) and are deleted automatically after a while; these notes are the lasting record._
