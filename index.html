@@ -188,11 +188,12 @@
   // Only an explicit "waiting" entry means the helper is asking the owner; no entry also reads as 'waiting'.
   const askedWaiting = (file) => state(file) === 'waiting' && window.STATUS?.agents?.[file]?.state === 'waiting';
   const waitingForYou = (file) => askedWaiting(file) && !roundOver();
-  // Who takes the work after the first working agent in the relay. Parked agents can't take work, so they are skipped.
+  // Who takes the work after the first working agent in the relay. Parked agents can't take work, and a helper
+  // waiting for the owner only moves on after the owner answers, so both are skipped.
   const canTakeWork = (file) => !window.AGENTS?.[file]?.parked;
   function nextUp() {
     const i = RELAY.findIndex((f) => state(f) === 'working');
-    return i < 0 ? null : RELAY.slice(i + 1).find(canTakeWork) || null;
+    return i < 0 ? null : RELAY.slice(i + 1).find((f) => canTakeWork(f) && !waitingForYou(f)) || null;
   }
 
   function renderRelay() {
