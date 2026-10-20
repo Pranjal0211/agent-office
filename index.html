@@ -151,7 +151,7 @@
     <p class="hint">Work is passed along left to right, like a baton. The team lead keeps it moving.</p>
     <div id="lead"></div>
     <ol class="track" id="track"></ol>
-    <p class="loop">If the <b>Tester</b> or <b>Checker</b> finds a problem, it goes back to the <b>Builder</b> (up to 3 times). Then the change is saved and the next round starts.</p>
+    <p class="loop" id="loop"></p>
   </section>
 
   <section aria-labelledby="crew-h">
@@ -160,7 +160,7 @@
     <div class="grid" id="grid"></div>
   </section>
 
-  <p class="note">Update after editing an agent: <code>npm run dashboard</code>. Live status comes from <code>dashboard/status.js</code>, which runs will write to; this page re-checks it every few seconds.</p>
+  <p class="note">Live status comes from <code>status.js</code> in this folder, which the crew updates at each handover; this page re-checks it every few seconds. After editing an agent, run <code>npm run dashboard</code> in the <code>agent-crew</code> folder to refresh the helpers' details here.</p>
 </div>
 
 <script src="team.js"></script>
@@ -205,6 +205,13 @@
     }).join('');
   }
 
+  // Who can send work back: the Tester, plus the Checker only when it isn't parked.
+  function renderLoop() {
+    const who = ['tester', 'code-reviewer'].filter((f) => f === 'tester' || canTakeWork(f)).map((f) => `<b>${esc(byFile[f].nickname)}</b>`).join(' or ');
+    document.getElementById('loop').innerHTML =
+      `If the ${who} finds a problem, the work goes back to the <b>${esc(byFile.builder.nickname)}</b>, at most 2 more tries. If it then passes, the change is saved and the next task starts; if it still fails, the crew stops and tells you.`;
+  }
+
   function renderCards() {
     const next = nextUp();
     const grid = document.getElementById('grid');
@@ -229,7 +236,7 @@
           <span>Brain: ${esc(MODEL_WORDS[a.model] || a.model)}</span>
         </div>
         <details data-panel="missing"><summary>What's missing</summary><ul>${t.missing.map((m) => `<li>${esc(m)}</li>`).join('')}</ul></details>
-        <details data-panel="instructions"><summary>Read its instructions</summary><pre>${esc(a.instructions || 'Run npm run dashboard to load this.')}</pre></details>
+        <details data-panel="instructions"><summary>Read its instructions</summary><pre>${esc(a.instructions || 'Not loaded. Run npm run dashboard in the agent-crew folder to load this.')}</pre></details>
       </article>`;
     }).join('');
     grid.querySelectorAll('details').forEach((d) => { d.open = open.has(`${d.closest('[data-file]').dataset.file}/${d.dataset.panel}`); });
@@ -263,6 +270,7 @@
     document.body.appendChild(s);
   }, 3000);
 
+  renderLoop();
   render();
 </script>
 </body>
