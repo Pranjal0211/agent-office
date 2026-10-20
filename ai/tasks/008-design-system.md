@@ -1,6 +1,6 @@
 # 008: Create the design system (the office's look)
 
-Status: design approved
+Status: passed
 Needs design: yes
 Big change: yes
 
@@ -61,3 +61,54 @@ Every direction should take a clear position on each of these, so the owner can 
 - 2026-10-20: owner asked for changes on v1
 - v2: 1 direction (B, the badge wall), made with Opus (no approved design system yet), waiting for the owner
 - 2026-10-20: owner approved option B on v2 → `design/008-design-system/v2/option-b.html` is the source of truth
+
+## Builder notes
+
+> **In short:** The crew page now uses the approved badge-wall look: a pinned memo at the top (bright orange when a helper needs you, pink when one is stuck), "Today's shift" with tags clipped to a line, each active helper as an ID badge on a lanyard with a rubber-stamp status that you can flip for details, and Scout and Checker lying in an "Away tray". Live updates work as before.
+
+**Changed**
+- `index.html`: replaced the tokens and fonts with the approved ones (Archivo + IBM Plex Mono, wall/badge/stamp colors, 4-64px spacing; light only as approved, so the old dark-mode block is gone); rebuilt the relay track as the shift line, the cards as flip badges, parked helpers as the Away tray, the top line as the memo, and the instructions panel as a "Job description" dialog. Kept `state()`, `nextUp()`, `waitingForYou()`, `roundOver()`, `askedWaiting()`, `canTakeWork()`, `esc()` and the 3-second `status.js` poll unchanged.
+
+**How to see it**
+Copy the project to a scratch folder and put your own `status.js` there (never the live one), then open it with `node tools/check-page.mjs --dir <copy> --project <agent-office> --task 008`:
+- Builder working, planner/designer done, no tester entry: memo "Builder is working on agent-office. Next up: Tester.", Builder tag has a ring + "Has the work", Tester stamp "Up next".
+- Designer `waiting` with a doing line, round open: memo turns orange "For you · please answer", Designer badge stamp "Needs you" with an orange ring.
+- Builder `failed`, nobody working: memo "Memo · problem / Builder is stuck on ...", Builder stamp "Stuck" with a red ring.
+- Add `finishedAt` to `run` and leave a `waiting` entry: memo "Nobody is working. Last round finished ...", the leftover helper shows "Free", never "Waiting for you".
+- Click "Flip badge", then change `status.js`: within 3 s the page updates and the badge stays flipped. An open "Job description" also stays open.
+
+**Self-check**
+- [x] Design approved before building: `decision.mjs check` returned approved v2 option B.
+- [x] Uses approved colors, fonts, spacing, badge/stamp/shift look: screenshots `.agent-shots/008/builder-*-1280.png` / `-375.png` compared side by side with `design-v2-b-1280.png` / `-375.png`; same layout, colors and wording apart from the header (see below). Every helper still shows its plain-words line on the badge front, with gets/hands over on the back.
+- [x] Live states show correctly: checked working, up next, waiting for you, stuck, done, free, parked and finished-round with fake `status.js` files in `/tmp/ao008` (found counts and screenshots `builder-{live,next,you,stuck,fin,idle}-*.png`).
+- [x] 375px and 1280px: `overflowPx` 0 and no console errors in all 6 states; text/background pairs checked at 4.78:1 or better (WCAG AA); keyboard focus shows a 3px blue outline (checked with Tab in Playwright); the memo nudge and badge flip run only without reduced motion (`prefers-reduced-motion` media queries, as in the design).
+- [x] Nothing broke: a Playwright run on the copy swapped `status.js` while the page was open. The memo updated within 3 s without a reload, a flipped badge stayed flipped, an open job description stayed open, and the finished round showed no "Waiting for you". Parked helpers are explained in the shift hint and the Away tray.
+
+**Not done / unsure**
+- Header wording: the card says to keep today's title and header words, so the page still says "Agent Crew Board" / "agent-crew · crew board" / "Your AI build crew" and today's intro sentence, in the approved style. The prototype shows "Agent Office" / "Staff board · agent-office" and a badge-specific intro. Changing them is a one-line follow-up if the owner wants the prototype's words.
+- Left out because they are prototype-only: the "Try a state" switcher and "The badge kit" specimen section (the card puts the specimen in the Designer's prototypes, not in the app). The footer keeps today's note (including `npm run dashboard`) instead of the prototype's "the real page re-checks..." line.
+- Kept two existing behaviours where the prototype's copied logic differed: (1) `nextUp()` still skips a helper who is waiting for you (task 009); (2) "Up next" still wins over an earlier "Done" from the same round, as on the old cards. The prototype showed the Tester as "Done" in that case.
+- The memo has an approved new "stuck" message (shown only when nobody is working, nobody is waiting for you and a helper failed). Before, that case read "A round is running... between helpers."
+- The Away tray hides itself if no helper is parked (the prototype always has two). The badge's "Read its instructions" panel is now the prototype's "Job description" dialog.
+
+## Tester notes
+
+> **In short:** Passed. The crew page now looks like the badge wall you approved: pinned memo, "Today's shift" tags, ID badges with rubber stamps, and an Away tray for Scout and Checker. All live states show correctly and nothing broke.
+
+**Checks**
+- [x] 2 or 3 directions shown by the Designer (office-like and badge-like): v1 had 3 directions, v2 kept the badge wall after your changes; `decision.md` records the approval (see the Design section)
+- [x] Specimen and real-page states in the prototype: the "badge kit" section and the state switcher exist in `design/008-design-system/v2/option-b.html` (`.agent-shots/008/proto-*-1280.png`)
+- [x] Owner approved one direction: `decision.mjs check` returned approved v2 option B
+- [x] Built page uses the approved colors, fonts, spacing, badge, stamp, shift and memo look; every helper shows its plain-words line; all 6 prototype states (live, working+next, waiting for you, stuck, finished, idle) tested with the prototype's own status data, and stamps/memo wording match (`.agent-shots/008/built-*-1280.png`, `-375.png`)
+- [x] 375px and 1280px: sideways overflow 0 in all 12 runs, no console errors, text contrast 4.7:1 or better (sampled), 3px blue keyboard focus on buttons, no animations with reduced motion
+- [x] Nothing broke: swapping `status.js` while the page was open updated the memo within 4 s, a flipped badge and an open job description both stayed as they were, a finished round with a leftover "waiting" entry shows "Free" and no "Waiting for you", parked helpers are explained in the shift hint and the Away tray
+
+**Scope:** OK (only `index.html` and this card changed; `status.js`, `team.js`, `agents.generated.js` untouched)
+**Design match:** OK (approved: v2 option B). Differences are only the header words (kept as today's, as the card requires) and the prototype-only "Try a state" switcher and badge kit, which the card says stay out of the page.
+**Nothing broke:** OK
+
+**Noted for later**
+- The Team lead badge shows its status twice, as a stamp ("Running a round") and again as "Working on: Passing work along the shift"
+- Dark mode was dropped (the approved design is light only): owners using a dark system theme now get the light page
+
+_Screenshots are local only (`.agent-shots/008/`) and are deleted automatically after a while; these notes are the lasting record._

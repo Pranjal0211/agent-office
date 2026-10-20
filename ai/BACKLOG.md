@@ -16,6 +16,8 @@ In progress: `ai/tasks/008-design-system.md` (Create the design system: the offi
 - The page is still titled "Agent Crew Board" / "Your AI build crew" and says "Seven helpers" although two are parked, not "Agents Office" (V1 E1 R1 = 0): the header's look is in 008; the wording is a separate small fix
 - Parked helpers look only faded, with faint text on the greyed-out cards (noted by the Tester in 005) (V1 E1 R1 = 0) (design): look question is in 008
 - The relay track only highlights the helper that is working; finished, stuck or waiting-for-you helpers look the same as idle ones (V1 E1 R1 = 0) (design): look question is in 008
+- The Team lead badge shows its status twice: the "Running a round" stamp and a "Working on: Passing work along the shift" line (found by Tester in 008) (V1 E1 R1 = 0) (design)
+- The page has no dark mode now, because the approved badge-wall design is light only (found by Tester in 008) (V1 E2 R1 = -1) (design)
 - If the live status can't be loaded, the page silently keeps showing old status with no warning (V1 E1 R1 = 0)
 - If a round crashes, a helper can stay "working" forever with no hint that the status is old (V1 E2 R1 = -1)
 - Give an agent work from the page: waiting on the owner (`ai/QUESTIONS.md` question 1; behaviour, not look)
