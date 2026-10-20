@@ -38,8 +38,7 @@ window.TEAM = [
     gives: 'One task card with a "done when" checklist',
     depth: 2,
     missing: [
-      'Not tested yet: we run it on Agents Office next',
-      'Scoring rules are a first guess; we tune them after seeing real results',
+      'Marks which tasks need your design approval; the "design system first" rule hasn\'t run for real yet',
     ],
   },
   {
@@ -76,7 +75,7 @@ window.TEAM = [
     gives: 'Passed (work saved) or failed (sent back with exact fixes)',
     depth: 2,
     missing: [
-      'Missed a repeated line in task 001; now has a "first-time visitor" check, not yet tested',
+      'Now checks the build matches your approved design; not yet used on a real designed task',
       'Only checks how pages look and react to data; can\'t click through flows yet',
     ],
   },
