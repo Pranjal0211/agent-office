@@ -148,7 +148,7 @@
 
   <section class="relay" aria-labelledby="relay-h">
     <h2 id="relay-h">How one round works</h2>
-    <p class="hint">Work is passed along left to right, like a baton. The team lead keeps it moving.</p>
+    <p class="hint">Work is passed along left to right, like a baton. The team lead keeps it moving.<span id="parked-note"></span></p>
     <div id="lead"></div>
     <ol class="track" id="track"></ol>
     <p class="loop" id="loop"></p>
@@ -176,6 +176,7 @@
   const MODEL_WORDS = { opus: 'Opus (strongest)', sonnet: 'Sonnet (fast, capable)', haiku: 'Haiku (quickest)', inherit: 'Same as yours' };
   const DEPTH_WORDS = ['', 'Draft', 'Usable', 'Solid', 'Expert'];
   const STATE_WORDS = { waiting: 'Waiting', working: 'Working', done: 'Done', failed: 'Stuck', parked: 'Parked', next: 'Up next' };
+  const PARKED_LINE = 'Parked: switched off for now, so rounds skip this helper. It can be brought back later.';
 
   const byFile = Object.fromEntries(TEAM.map((t) => [t.file, t]));
   const initials = (s) => s.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
@@ -212,6 +213,13 @@
       `If the ${who} finds a problem, the work goes back to the <b>${esc(byFile.builder.nickname)}</b>, at most 2 more tries. If it then passes, the change is saved and the next task starts; if it still fails, the crew stops and tells you.`;
   }
 
+  // Parked state doesn't change while the page is open, so this runs once at start-up.
+  function renderParked() {
+    const names = TEAM.filter((t) => !canTakeWork(t.file)).map((t) => esc(t.nickname));
+    const list = names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}` : names[0];
+    if (list) document.getElementById('parked-note').innerHTML = ` Greyed-out helpers are parked (switched off for now), so the work skips them: ${list}.`;
+  }
+
   function renderCards() {
     const next = nextUp();
     const grid = document.getElementById('grid');
@@ -228,7 +236,7 @@
           <span class="pill"><span class="dot"></span>${STATE_WORDS[s] || s}</span>
         </div>
         <p class="one">${esc(t.oneLine)}</p>
-        <p class="doing">${esc(doing(t.file))}</p>
+        <p class="doing">${state(t.file) === 'parked' ? PARKED_LINE : esc(doing(t.file))}</p>
         <dl class="flow"><dt>Gets</dt><dd>${esc(t.gets)}</dd><dt>Gives</dt><dd>${esc(t.gives)}</dd></dl>
         <ul class="chips" aria-label="Allowed to">${tools.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
         <div class="meta">
@@ -271,6 +279,7 @@
   }, 3000);
 
   renderLoop();
+  renderParked();
   render();
 </script>
 </body>
