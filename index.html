@@ -207,11 +207,14 @@
 
   function renderCards() {
     const next = nextUp();
-    document.getElementById('grid').innerHTML = TEAM.map((t) => {
+    const grid = document.getElementById('grid');
+    // Redrawing the grid closes every <details>, so note which panels are open and re-open them after.
+    const open = new Set([...grid.querySelectorAll('details[open]')].map((d) => `${d.closest('[data-file]').dataset.file}/${d.dataset.panel}`));
+    grid.innerHTML = TEAM.map((t) => {
       const a = window.AGENTS?.[t.file] || { tools: [], model: 'inherit', instructions: '' };
       const tools = [...new Set(a.tools.map((x) => TOOL_WORDS[x] || x))];
       const s = t.file === next && state(t.file) !== 'working' ? 'next' : state(t.file);
-      return `<article class="card" style="--c:${t.color}" data-state="${s}">
+      return `<article class="card" style="--c:${t.color}" data-state="${s}" data-file="${esc(t.file)}">
         <div class="card-head">
           <span class="token" aria-hidden="true">${initials(t.nickname)}</span>
           <span class="names"><span class="nick">${esc(t.nickname)}</span><span class="file">${esc(t.file)}.md</span></span>
@@ -225,10 +228,11 @@
           <span class="depth">Depth <span class="bars" aria-hidden="true">${[1, 2, 3, 4].map((n) => `<i class="${n <= t.depth ? 'on' : ''}"></i>`).join('')}</span><b>${DEPTH_WORDS[t.depth]}</b></span>
           <span>Brain: ${esc(MODEL_WORDS[a.model] || a.model)}</span>
         </div>
-        <details><summary>What's missing</summary><ul>${t.missing.map((m) => `<li>${esc(m)}</li>`).join('')}</ul></details>
-        <details><summary>Read its instructions</summary><pre>${esc(a.instructions || 'Run npm run dashboard to load this.')}</pre></details>
+        <details data-panel="missing"><summary>What's missing</summary><ul>${t.missing.map((m) => `<li>${esc(m)}</li>`).join('')}</ul></details>
+        <details data-panel="instructions"><summary>Read its instructions</summary><pre>${esc(a.instructions || 'Run npm run dashboard to load this.')}</pre></details>
       </article>`;
     }).join('');
+    grid.querySelectorAll('details').forEach((d) => { d.open = open.has(`${d.closest('[data-file]').dataset.file}/${d.dataset.panel}`); });
   }
 
   function renderNow() {
@@ -246,7 +250,7 @@
   function render() { renderRelay(); renderCards(); renderNow(); }
 
   // Re-read status.js every few seconds so live runs show up without a refresh.
-  // Open <details> stay open because only status bits change when nothing is running.
+  // render() redraws the cards; renderCards() re-opens any panels that were open, so they survive updates.
   let last = JSON.stringify(window.STATUS);
   setInterval(() => {
     const s = document.createElement('script');
