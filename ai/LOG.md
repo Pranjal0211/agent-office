@@ -1,5 +1,6 @@
 # Log
 
+- 2026-10-20 · 010 Make the header and title match the approved design · passed (1 try) · follows approved design 008
 - 2026-10-20 · 008 Create the design system (badge wall) · passed (1 try) · design: approved v2 option B
 - 2026-10-20 · 009 A helper waiting for you is not up next · passed (1 try) · no design
 - 2026-10-20 · 007 Stop saying Waiting for you after the round has ended · passed (1 try) · no design
