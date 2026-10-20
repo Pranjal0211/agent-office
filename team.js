@@ -64,8 +64,7 @@ window.TEAM = [
     gives: 'Changed code plus notes on how to see it',
     depth: 2,
     missing: [
-      'Not tested yet: first job is task 001 on Agent Office',
-      'Can\'t open a browser to see its own work; relies on the Tester for that',
+      'Waits for your design approval and checks its work in a browser; not yet run on a real designed task',
     ],
   },
   {
