@@ -1,5 +1,6 @@
 # Log
 
+- 2026-10-20 · 009 A helper waiting for you is not up next · passed (1 try) · no design
 - 2026-10-20 · 007 Stop saying Waiting for you after the round has ended · passed (1 try) · no design
 - 2026-10-20 · 006 Say so at the top when the crew is waiting for you · passed (1 try) · no design
 - 2026-10-20 · 005 Say in plain words what parked means · passed (1 try) · no design
