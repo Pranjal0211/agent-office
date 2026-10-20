@@ -190,9 +190,9 @@
   }
 
   function renderRelay() {
-    const lead = byFile.orchestrator;
+    const lead = byFile['team-lead'];
     document.getElementById('lead').innerHTML =
-      `<div class="lead-badge" style="--c:${lead.color};--lead:${lead.color}" data-state="${state('orchestrator')}">
+      `<div class="lead-badge" style="--c:${lead.color};--lead:${lead.color}" data-state="${state('team-lead')}">
          <span class="token" style="width:40px;height:40px;font-size:.9rem;box-shadow:none">${initials(lead.nickname)}</span>
          <span><b>${esc(lead.nickname)}</b> coordinates the round</span>
        </div>`;

@@ -3,17 +3,16 @@
 // depth: 1 = draft, 2 = usable, 3 = solid, 4 = expert. `missing` is what keeps it from the next level.
 window.TEAM = [
   {
-    file: 'orchestrator',
+    file: 'team-lead',
     nickname: 'Team lead',
     color: '#4338ca',
-    oneLine: 'Runs a round from start to finish and decides who works next.',
-    gets: 'Your goal and the project folder',
-    gives: 'One finished, tested, committed improvement',
-    depth: 1,
+    oneLine: 'Runs the crew task after task when you type /round, and stops when it needs you.',
+    gets: 'Your /round command and the project',
+    gives: 'Finished, tested, saved tasks, plus designs waiting for your decision',
+    depth: 2,
     missing: [
-      'Only knows one hard-coded project; can\'t be pointed at any folder yet',
-      'No budget or time limit per round',
-      'Doesn\'t write live status for this dashboard yet',
+      'Not run yet: first real run is on Agent Office',
+      'Only runs while this app is open; no scheduled runs yet',
     ],
   },
   {
