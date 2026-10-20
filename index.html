@@ -183,8 +183,11 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const state = (file) => window.AGENTS?.[file]?.parked ? 'parked' : (window.STATUS?.agents?.[file]?.state) || 'waiting';
   const doing = (file) => window.STATUS?.agents?.[file]?.doing || '';
+  // The round has ended. Any "waiting" entry left over is out of date: the owner already answered before the finish.
+  const roundOver = () => !!window.STATUS?.run?.finishedAt;
   // Only an explicit "waiting" entry means the helper is asking the owner; no entry also reads as 'waiting'.
-  const waitingForYou = (file) => state(file) === 'waiting' && window.STATUS?.agents?.[file]?.state === 'waiting';
+  const askedWaiting = (file) => state(file) === 'waiting' && window.STATUS?.agents?.[file]?.state === 'waiting';
+  const waitingForYou = (file) => askedWaiting(file) && !roundOver();
   // Who takes the work after the first working agent in the relay. Parked agents can't take work, so they are skipped.
   const canTakeWork = (file) => !window.AGENTS?.[file]?.parked;
   function nextUp() {
@@ -238,7 +241,7 @@
           <span class="pill"><span class="dot"></span>${s === 'waiting' && waitingForYou(t.file) ? 'Waiting for you' : STATE_WORDS[s] || s}</span>
         </div>
         <p class="one">${esc(t.oneLine)}</p>
-        <p class="doing">${state(t.file) === 'parked' ? PARKED_LINE : esc(doing(t.file))}</p>
+        <p class="doing">${state(t.file) === 'parked' ? PARKED_LINE : askedWaiting(t.file) && roundOver() ? '' : esc(doing(t.file))}</p>
         <dl class="flow"><dt>Gets</dt><dd>${esc(t.gets)}</dd><dt>Gives</dt><dd>${esc(t.gives)}</dd></dl>
         <ul class="chips" aria-label="Allowed to">${tools.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
         <div class="meta">
@@ -256,7 +259,7 @@
     const run = window.STATUS?.run;
     const busy = TEAM.find((t) => state(t.file) === 'working');
     const next = byFile[nextUp()];
-    const open = run?.startedAt && !run.finishedAt;
+    const open = run?.startedAt && !roundOver();
     const asking = open && TEAM.find((t) => waitingForYou(t.file));
     const on = run?.project ? ` on ${run.project}` : '';
     const el = document.getElementById('now');
