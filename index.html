@@ -218,7 +218,7 @@
           <span class="pill"><span class="dot"></span>${STATE_WORDS[s] || s}</span>
         </div>
         <p class="one">${esc(t.oneLine)}</p>
-        <p class="doing">${esc(doing(t.file) || (s === 'next' ? `Will get: ${t.gets}` : ''))}</p>
+        <p class="doing">${esc(doing(t.file))}</p>
         <dl class="flow"><dt>Gets</dt><dd>${esc(t.gets)}</dd><dt>Gives</dt><dd>${esc(t.gives)}</dd></dl>
         <ul class="chips" aria-label="Allowed to">${tools.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
         <div class="meta">
